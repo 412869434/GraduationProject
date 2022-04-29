@@ -1,19 +1,35 @@
-import { Box, Center, Flex, Text, VisuallyHiddenInput } from "@chakra-ui/react";
+import {
+  Center,
+  Flex,
+  Text,
+  VisuallyHiddenInput,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from "@chakra-ui/react";
 import * as tf from "@tensorflow/tfjs";
 import Head from "next/head";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import LABELS from "../public/labels";
+import PreviewContainer from "../component/PreviewContainer";
+import PromptContainer from "../component/PromptConainer";
 
 const BG_UPLOAD = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' stroke='%23E4E6ED' stroke-width='4' stroke-dasharray='4, 12' stroke-linecap='square'/%3E%3C/svg%3E")`;
 const WEIGHTS = "best_web_model/model.json";
-
-const [MODEL_WIDTH, MODEL_HEIGHT] = [640, 640];
 
 export default function Home() {
   const [imagePreview, setImagePreview] = useState();
   const [isModelLoaded, setModelLoaded] = useState();
   const [isHover, setHover] = useState(false);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   // load model when the page is loaded
   useEffect(async () => {
@@ -48,11 +64,11 @@ export default function Home() {
       </Head>
 
       <Center as="main" h="100vh">
-        <Flex className="object-detection" justifyContent="center" alignItems="center">
+        <Flex className="object-detection" justifyContent="center" alignItems="flex-start" marginTop="-10em">
           <Flex
             className="detection-container"
             justifyContent="center"
-            alignItems="center"
+            alignItems="flex-start"
             padding="1em"
             cursor="pointer"
             position="relative"
@@ -64,7 +80,7 @@ export default function Home() {
             onClick={() => clickHandler("file-input")}
           >
             {imagePreview ? (
-              <PreviewContainer props={{ image: imagePreview, model: isModelLoaded }} />
+              <PreviewContainer props={{ image: imagePreview, model: isModelLoaded, setData: setData }} />
             ) : isModelLoaded ? (
               <PromptContainer props={{ hover: isHover }} />
             ) : (
@@ -72,155 +88,38 @@ export default function Home() {
             )}
           </Flex>
           <VisuallyHiddenInput id="file-input" type="file" accept="image/*" onChange={(e) => uploadHandler(e)} />
+          <Flex marginLeft="3em" marginTop="-3em">
+            <TableContainer>
+              <Table variant="simple">
+                <TableCaption placement="top">藻类识别统计表格</TableCaption>
+                <Thead>
+                  <Tr>
+                    <Th>藻类门</Th>
+                    <Th>藻类属</Th>
+                    <Th>藻类种</Th>
+                    <Th>概率</Th>
+                    <Th isNumeric>数量</Th>
+                  </Tr>
+                </Thead>
+
+                <Tbody>
+                  {data.map((item) => (
+                    <>
+                      <Tr key={item.label + item.score + item.x}>
+                        <Td>{item.label}</Td>
+                        <Td>{item.label}</Td>
+                        <Td>{item.label}</Td>
+                        <Td>{item.score}</Td>
+                        <Td isNumeric>1</Td>
+                      </Tr>
+                    </>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Flex>
         </Flex>
       </Center>
     </>
-  );
-}
-
-function PromptContainer({ props }) {
-  return (
-    <Flex
-      className="prompt-container"
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      textAlign="center"
-      w="100%"
-      h="100%"
-      pointerEvents="none"
-    >
-      <Box
-        as="svg"
-        aria-hidden="true"
-        focusable="false"
-        data-prefix="far"
-        data-icon="image"
-        role="img"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 512 512"
-        w={128}
-        h={128}
-        transition="0.3s"
-        fill={props.hover ? "honoluluBlue.500" : "#e4e6ed"}
-      >
-        <path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 336H54a6 6 0 0 1-6-6V118a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v276a6 6 0 0 1-6 6zM128 152c-22.091 0-40 17.909-40 40s17.909 40 40 40 40-17.909 40-40-17.909-40-40-40zM96 352h320v-80l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L192 304l-39.515-39.515c-4.686-4.686-12.284-4.686-16.971 0L96 304v48z"></path>
-      </Box>
-      <Box className="prompt" color="#868f9b" mt={4}>
-        <Text>把图片拖到此处，或者</Text>
-        <Text>
-          <Box as="span" className="dialogue-link" color="black" textDecoration="underline">
-            打开
-          </Box>{" "}
-          从你的电脑中{" "}
-        </Text>
-      </Box>
-    </Flex>
-  );
-}
-
-function PreviewContainer({ props }) {
-  const [dataPredict, setDataPredict] = useState([]);
-
-  useEffect(() => {
-    console.log(dataPredict);
-  }, [dataPredict]);
-
-  // handler for object detection
-  const detect = async (net) => {
-    setDataPredict([]); // reset bounding box
-    const imagePlaceholder = document.getElementsByClassName("preview-img")[0];
-    const imageTensor = tf.browser.fromPixels(imagePlaceholder);
-
-    // load input
-    const input = tf.image.resizeBilinear(imageTensor, [MODEL_WIDTH, MODEL_HEIGHT]).div(255.0).expandDims(0);
-
-    // inference
-    const res = await net.executeAsync(input);
-    const [boxes, scores, classes, valid_detections] = res;
-
-    for (let i = 0; i < valid_detections.dataSync()[0]; i++) {
-      const [x1, y1, x2, y2] = boxes.dataSync().slice(i * 4, (i + 1) * 4);
-      setDataPredict((dataPredict) => [
-        ...dataPredict,
-        {
-          score: scores.dataSync()[i].toFixed(2),
-          label: LABELS[classes.dataSync()[i]],
-          x: (x1 * 100).toFixed(2) + "%",
-          y: (y1 * 100).toFixed(2) + "%",
-          width: ((x2 - x1) * 100).toFixed(2) + "%",
-          height: ((y2 - y1) * 100).toFixed(2) + "%",
-        },
-      ]);
-    }
-  };
-
-  return (
-    <Flex
-      className="preview-container"
-      justifyContent="center"
-      alignItems="center"
-      textAlign="center"
-      position="relative"
-    >
-      <Box className="preview" w={480} h={320}>
-        <Image
-          className="preview-img"
-          src={props.image}
-          layout="fill"
-          onLoad={() => detect(props.model)}
-          alt="Image Preview"
-        />
-        {dataPredict.length == 0 ? (
-          <Center
-            position="absolute"
-            w="100%"
-            h="100%"
-            color="white"
-            backgroundColor="rgba(0,0,0,0.8)"
-            cursor="progress"
-          >
-            检测中...
-          </Center>
-        ) : (
-          dataPredict.map((row, i) => {
-            return <DetectionContainer key={i} props={row} />;
-          })
-        )}
-      </Box>
-    </Flex>
-  );
-}
-
-function DetectionContainer({ props }) {
-  return (
-    <Box
-      className="detection"
-      position="absolute"
-      left={props.x}
-      top={props.y}
-      w={props.width}
-      h={props.height}
-      borderWidth="2px"
-      borderStyle="solid"
-      borderColor="red"
-    >
-      <Box
-        className="label"
-        position="absolute"
-        left="1px"
-        top="1px"
-        color="#fff"
-        padding="0.2em"
-        whiteSpace="nowrap"
-        textTransform="uppercase"
-        fontWeight="500"
-        fontSize="0.8em"
-        cursor="default"
-        backgroundColor="red"
-      >
-        {props.label} - {props.score}
-      </Box>
-    </Box>
   );
 }
