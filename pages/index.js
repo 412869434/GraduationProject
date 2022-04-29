@@ -3,40 +3,11 @@ import * as tf from "@tensorflow/tfjs";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import LABELS from "../public/labels";
 
 const BG_UPLOAD = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' stroke='%23E4E6ED' stroke-width='4' stroke-dasharray='4, 12' stroke-linecap='square'/%3E%3C/svg%3E")`;
 const WEIGHTS = "best_web_model/model.json";
-const LABELS = [
-  "10001000",
-  "10003001",
-  "10004000",
-  "10008001",
-  "10009000",
-  "10024002",
-  "10033000",
-  "10037000",
-  "10037001",
-  "10037005",
-  "10038000",
-  "10039000",
-  "10042000",
-  "10043000",
-  "10043067",
-  "10044000",
-  "10044037",
-  "10044097",
-  "10045000",
-  "10045004",
-  "10045090",
-  "10045209",
-  "10054000",
-  "10054001",
-  "10055000",
-  "10057000",
-  "10075000",
-  "10114001",
-  "10165001",
-];
+
 const [MODEL_WIDTH, MODEL_HEIGHT] = [640, 640];
 
 export default function Home() {
