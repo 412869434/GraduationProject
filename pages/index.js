@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>TensorFlow.js Inference with Next.js</title>
+        <title>藻类识别计数系统</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -68,7 +68,7 @@ export default function Home() {
             ) : isModelLoaded ? (
               <PromptContainer props={{ hover: isHover }} />
             ) : (
-              <Text color="#868f9b">Loading Model...</Text>
+              <Text color="#868f9b">加载模型中...</Text>
             )}
           </Flex>
           <VisuallyHiddenInput id="file-input" type="file" accept="image/*" onChange={(e) => uploadHandler(e)} />
@@ -107,12 +107,12 @@ function PromptContainer({ props }) {
         <path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 336H54a6 6 0 0 1-6-6V118a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v276a6 6 0 0 1-6 6zM128 152c-22.091 0-40 17.909-40 40s17.909 40 40 40 40-17.909 40-40-17.909-40-40-40zM96 352h320v-80l-87.515-87.515c-4.686-4.686-12.284-4.686-16.971 0L192 304l-39.515-39.515c-4.686-4.686-12.284-4.686-16.971 0L96 304v48z"></path>
       </Box>
       <Box className="prompt" color="#868f9b" mt={4}>
-        <Text>Drag and drop your image here, or</Text>
+        <Text>把图片拖到此处，或者</Text>
         <Text>
           <Box as="span" className="dialogue-link" color="black" textDecoration="underline">
-            open
+            打开
           </Box>{" "}
-          from your computer{" "}
+          从你的电脑中{" "}
         </Text>
       </Box>
     </Flex>
@@ -180,7 +180,7 @@ function PreviewContainer({ props }) {
             backgroundColor="rgba(0,0,0,0.8)"
             cursor="progress"
           >
-            Detecting...
+            检测中...
           </Center>
         ) : (
           dataPredict.map((row, i) => {
