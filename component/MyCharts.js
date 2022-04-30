@@ -22,7 +22,6 @@ function MyCharts(props) {
 
   useEffect(() => {
     if (data.length) {
-      console.log(data);
       const obj = {};
       for (const item of data) {
         const { score, label } = item;

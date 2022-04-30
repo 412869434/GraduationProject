@@ -1,4 +1,4 @@
-import { Center, Flex, Text, VisuallyHiddenInput, Heading } from "@chakra-ui/react";
+import { Center, Flex, Text, VisuallyHiddenInput } from "@chakra-ui/react";
 import * as tf from "@tensorflow/tfjs";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -9,7 +9,11 @@ import MyTable from "../component/MyTable";
 import { Layout } from "antd";
 const { Header, Content } = Layout;
 
-const BG_UPLOAD = `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' stroke='%23E4E6ED' stroke-width='4' stroke-dasharray='4, 12' stroke-linecap='square'/%3E%3C/svg%3E")`;
+const BG_UPLOAD = `url("data:image/svg+xml;charset=utf-8,%3Csvg 
+xmlns='http://www.w3.org/2000/svg'%3E%3Crect 
+width='100%25' height='100%25' fill='none' 
+stroke='%23E4E6ED' stroke-width='4' stroke-dasharray='4, 12' 
+stroke-linecap='square'/%3E%3C/svg%3E")`;
 const WEIGHTS = "best_web_model/model.json";
 
 export default function Home() {
@@ -22,23 +26,23 @@ export default function Home() {
     console.log(data);
   }, [data]);
 
-  // load model when the page is loaded
+  // 初始化异步加载模型
   useEffect(async () => {
     const model = await tf.loadGraphModel(WEIGHTS);
     setModelLoaded(model);
   }, []);
 
-  // handler for element clicker
+  // 元素点击器处理程序
   const clickHandler = (elementId) => {
     document.getElementById(elementId).click();
   };
 
-  // handler for uploading file
+  // 上传文件的处理程序
   const uploadHandler = (e) => {
     const reader = new FileReader();
     const file = e.target.files[0];
 
-    // let the app read file contents asynchronously
+    // 让应用程序异步读取文件内容
     if (reader !== undefined && file !== undefined) {
       reader.onloadend = function () {
         setImagePreview(reader.result);

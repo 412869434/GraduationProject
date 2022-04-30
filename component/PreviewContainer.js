@@ -12,20 +12,19 @@ function PreviewContainer({ props }) {
   const { setData } = props;
 
   useEffect(() => {
-    // console.log(dataPredict);
     setData(dataPredict);
   }, [dataPredict]);
 
-  // handler for object detection
+  // 目标检测处理器
   const detect = async (net) => {
-    setDataPredict([]); // reset bounding box
+    setDataPredict([]); // 重置边界框
     const imagePlaceholder = document.getElementsByClassName("preview-img")[0];
     const imageTensor = tf.browser.fromPixels(imagePlaceholder);
 
-    // load input
+    // 加载 input 输入框
     const input = tf.image.resizeBilinear(imageTensor, [MODEL_WIDTH, MODEL_HEIGHT]).div(255.0).expandDims(0);
 
-    // inference
+    // 推理检测
     const res = await net.executeAsync(input);
     const [boxes, scores, classes, valid_detections] = res;
 

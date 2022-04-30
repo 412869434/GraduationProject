@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+
 function DetectionContainer({ props }) {
   return (
     <Box
