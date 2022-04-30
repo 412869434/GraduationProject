@@ -43,7 +43,6 @@ const columns = [
 
 function MyTable(props) {
   const { data } = props;
-
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
