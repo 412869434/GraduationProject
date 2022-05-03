@@ -6,9 +6,11 @@ import PreviewContainer from "../component/PreviewContainer";
 import PromptContainer from "../component/PromptConainer";
 import MyCharts from "../component/MyCharts";
 import MyTable from "../component/MyTable";
+import MyForm from "../component/MyForm";
+import MyClassCharts from "../component/MyClassCharts";
 import { Layout } from "antd";
-const { Header, Content } = Layout;
 
+const { Header, Content } = Layout;
 const BG_UPLOAD = `url("data:image/svg+xml;charset=utf-8,%3Csvg 
 xmlns='http://www.w3.org/2000/svg'%3E%3Crect 
 width='100%25' height='100%25' fill='none' 
@@ -21,10 +23,8 @@ export default function Home() {
   const [isModelLoaded, setModelLoaded] = useState();
   const [isHover, setHover] = useState(false);
   const [data, setData] = useState([]);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const [chartsType, setChartsType] = useState("score");
+  const [rangeValue, setRangeValue] = useState([80, 100]);
 
   // 初始化异步加载模型
   useEffect(async () => {
@@ -65,9 +65,18 @@ export default function Home() {
         <Content>
           <Center as="main" h="100vh" marginTop="-100px">
             <Flex className="object-detection" justifyContent="center" alignItems="flex-start">
+              <Flex>
+                <MyForm
+                  setData={setData}
+                  setImagePreview={setImagePreview}
+                  setChartsType={setChartsType}
+                  chartsType={chartsType}
+                  rangeValue={rangeValue}
+                  setRangeValue={setRangeValue}
+                />
+              </Flex>
               <Flex
                 className="detection-container"
-                padding="1em"
                 cursor="pointer"
                 position="relative"
                 height="calc(320px + 40px)"
@@ -76,9 +85,12 @@ export default function Home() {
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
                 onClick={() => clickHandler("file-input")}
+                border="1px"
               >
                 {imagePreview ? (
-                  <PreviewContainer props={{ image: imagePreview, model: isModelLoaded, setData: setData }} />
+                  <PreviewContainer
+                    props={{ image: imagePreview, model: isModelLoaded, data: data, setData: setData }}
+                  />
                 ) : isModelLoaded ? (
                   <PromptContainer props={{ hover: isHover }} />
                 ) : (
@@ -87,12 +99,11 @@ export default function Home() {
               </Flex>
               <VisuallyHiddenInput id="file-input" type="file" accept="image/*" onChange={(e) => uploadHandler(e)} />
               <Flex marginLeft="3em">
-                <MyTable data={data} />
+                <MyTable data={data} rangeValue={rangeValue} />
               </Flex>
             </Flex>
           </Center>
-
-          <MyCharts data={data} />
+          {chartsType === "score" ? <MyCharts data={data} /> : <MyClassCharts data={data} rangeValue={rangeValue} />}
         </Content>
       </Layout>
     </>

@@ -112,4 +112,32 @@ const info = [
   { ID: "10024002", Phylum: "绿藻门", Genus: "多芒藻属", Species: "多芒藻" },
 ];
 
-export default info;
+const idFilter = [...new Set(info.map((i) => i.ID))].map((i) => {
+  return {
+    text: i,
+    value: i,
+  };
+});
+
+const phylumFilter = [...new Set(info.map((i) => i.Phylum))].map((i) => {
+  return {
+    text: i,
+    value: i,
+  };
+});
+
+const genusFilter = [...new Set(info.map((i) => i.Genus))].map((i) => {
+  return {
+    text: i,
+    value: i,
+  };
+});
+
+const speciesFilter = [...new Set(info.map((i) => i.Species))].map((i) => {
+  return {
+    text: i,
+    value: i,
+  };
+});
+
+export { info, idFilter, phylumFilter, genusFilter, speciesFilter };

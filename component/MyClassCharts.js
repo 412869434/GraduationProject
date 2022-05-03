@@ -2,13 +2,14 @@ import ReactECharts from "echarts-for-react";
 import { Row, Col } from "antd";
 import { useState, useEffect } from "react";
 
-function MyCharts(props) {
-  const { data } = props;
+function MyClassCharts(props) {
+  const { data, rangeValue } = props;
   const [series, setSeries] = useState([]);
+  const [xAxis, setXAxis] = useState([]);
 
   const options = {
     xAxis: {
-      data: ["总计", "1-0.9", "0.9-0.8", "0.8-0.7", "0.7-0.6", "0.6-0.5", "0.5-0"],
+      data: xAxis,
     },
     yAxis: {},
     series: series,
@@ -27,25 +28,22 @@ function MyCharts(props) {
       const obj = {};
       for (const item of data) {
         const { score, label } = item;
-        if (!obj[label]) obj[label] = new Array(7).fill(0);
-        let key = Math.ceil((1 - Number(score)) * 10);
-        if (key === 0) key = 1;
-        else if (key >= 6) key = 6;
-        obj[label][key] += 1;
-        obj[label][0] += 1;
+        if (score >= rangeValue[0] / 100 && score <= rangeValue[1] / 100) {
+          if (!obj[label]) obj[label] = 0;
+          obj[label] += 1;
+        }
       }
-      const tmp = Object.keys(obj).map((item) => {
-        return {
-          type: "bar",
-          name: item,
-          data: obj[item],
-        };
+      //   console.log(obj);
+      const tmp = Object.keys(obj).map((item) => obj[item]);
+      setXAxis(Object.keys(obj));
+      setSeries({
+        type: "bar",
+        data: tmp,
       });
-      setSeries(tmp);
     } else {
-      setSeries({ type: "bar", name: "", data: [0, 0, 0, 0, 0, 0, 0] });
+      setSeries({ type: "bar", name: "", data: [] });
     }
-  }, [data]);
+  }, [data, rangeValue]);
 
   return (
     <>
@@ -58,4 +56,4 @@ function MyCharts(props) {
   );
 }
 
-export default MyCharts;
+export default MyClassCharts;

@@ -9,18 +9,19 @@ const [MODEL_WIDTH, MODEL_HEIGHT] = [640, 640];
 
 function PreviewContainer({ props }) {
   const [dataPredict, setDataPredict] = useState([]);
-  const { setData } = props;
+  const [detectData, setDetectData] = useState([]);
+  const { data, setData } = props;
 
   useEffect(() => {
-    setData(dataPredict);
-  }, [dataPredict]);
+    setData([...data, ...detectData]);
+  }, [detectData]);
 
   // 目标检测处理器
   const detect = async (net) => {
     setDataPredict([]); // 重置边界框
     const imagePlaceholder = document.getElementsByClassName("preview-img")[0];
     const imageTensor = tf.browser.fromPixels(imagePlaceholder);
-
+    // console.log("imagePlaceholder: ", imagePlaceholder);
     // 加载 input 输入框
     const input = tf.image.resizeBilinear(imageTensor, [MODEL_WIDTH, MODEL_HEIGHT]).div(255.0).expandDims(0);
 
@@ -28,8 +29,18 @@ function PreviewContainer({ props }) {
     const res = await net.executeAsync(input);
     const [boxes, scores, classes, valid_detections] = res;
 
+    const tmp = [];
     for (let i = 0; i < valid_detections.dataSync()[0]; i++) {
       const [x1, y1, x2, y2] = boxes.dataSync().slice(i * 4, (i + 1) * 4);
+      const obj = {
+        score: scores.dataSync()[i].toFixed(2),
+        label: LABELS[classes.dataSync()[i]],
+        x: (x1 * 100).toFixed(2) + "%",
+        y: (y1 * 100).toFixed(2) + "%",
+        width: ((x2 - x1) * 100).toFixed(2) + "%",
+        height: ((y2 - y1) * 100).toFixed(2) + "%",
+      };
+      tmp.push(obj);
       setDataPredict((dataPredict) => [
         ...dataPredict,
         {
@@ -42,6 +53,7 @@ function PreviewContainer({ props }) {
         },
       ]);
     }
+    setDetectData(tmp);
   };
 
   return (
