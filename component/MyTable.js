@@ -41,7 +41,7 @@ function MyTable(props) {
       dataIndex: "score",
       sorter: (a, b) => a.score - b.score,
       render: (score) => {
-        const color = Number(score) >= Math.floor(rangeValue[0] / 100) ? "green" : "red";
+        const color = Number(score) >= rangeValue[0] / 100 ? "green" : "red";
         return (
           <>
             <Tag color={color} key={score}>
@@ -76,7 +76,7 @@ function MyTable(props) {
 
   return (
     <>
-      <Table columns={columns} dataSource={tableData} pagination={{ pageSize: 5 }} />
+      <Table columns={columns} dataSource={tableData} pagination={{ pageSize: 5, showSizeChanger: false }} />
     </>
   );
 }

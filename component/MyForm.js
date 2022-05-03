@@ -7,7 +7,7 @@ function MyForm(props) {
     setChartsType(e.target.value);
   };
   return (
-    <Card title="配置项" style={{ width: 200, marginRight: "10px" }}>
+    <Card title="配置项" style={{ width: 250, marginRight: "10px" }}>
       <Form name="basic" layout={"vertical"}>
         <Form.Item label={<b>数据重置：</b>}>
           <Button
