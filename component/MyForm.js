@@ -29,14 +29,15 @@ function MyForm(props) {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item
-          label={
-            <b>
-              多类别概率：{rangeValue[0]} - {rangeValue[1]}
-            </b>
-          }
-        >
-          <Slider range value={rangeValue} disabled={chartsType === "score"} onChange={(v) => setRangeValue(v)} />
+        <Form.Item label={<b>多类别概率范围：</b>}>
+          <Slider
+            range
+            value={rangeValue}
+            disabled={chartsType === "score"}
+            onChange={(v) => setRangeValue(v)}
+            tooltipVisible
+            tooltipPlacement={"bottom"}
+          />
         </Form.Item>
       </Form>
     </Card>
