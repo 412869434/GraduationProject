@@ -6,8 +6,15 @@ function MyForm(props) {
     // console.log(e);
     setChartsType(e.target.value);
   };
+  const marks = {
+    0: 0,
+    20: 20,
+    50: 50,
+    80: 80,
+    100: 100,
+  };
   return (
-    <Card title="配置项" style={{ width: 250, marginRight: "10px" }}>
+    <Card title={<b>配置项</b>} style={{ width: 250, marginRight: "10px" }}>
       <Form name="basic" layout={"vertical"}>
         <Form.Item label={<b>数据重置：</b>}>
           <Button
@@ -29,14 +36,19 @@ function MyForm(props) {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label={<b>多类别概率范围：</b>}>
+        <Form.Item
+          label={
+            <b>
+              多类别概率范围：{rangeValue[0]}-{rangeValue[1]}
+            </b>
+          }
+        >
           <Slider
             range
             value={rangeValue}
             disabled={chartsType === "score"}
             onChange={(v) => setRangeValue(v)}
-            tooltipVisible
-            tooltipPlacement={"bottom"}
+            marks={marks}
           />
         </Form.Item>
       </Form>
