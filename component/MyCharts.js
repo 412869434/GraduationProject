@@ -21,6 +21,10 @@ function MyCharts(props) {
       text: "藻类数量柱状图",
     },
     notMerge: true,
+    legend: {
+      orient: "vertical",
+      left: "right",
+    },
   };
 
   useEffect(() => {

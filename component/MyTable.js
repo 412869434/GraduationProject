@@ -76,7 +76,29 @@ function MyTable(props) {
 
   return (
     <>
-      <Table columns={columns} dataSource={tableData} pagination={{ pageSize: 5, showSizeChanger: false }} />
+      <Table
+        columns={columns}
+        dataSource={tableData}
+        pagination={{ pageSize: 5, showSizeChanger: false }}
+        summary={() => (
+          <Table.Summary fixed>
+            <Table.Summary.Row>
+              <Table.Summary.Cell index={0}>
+                <b>所有藻类总计</b>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={1}>
+                <b>
+                  {
+                    tableData.filter(
+                      (item) => Number(item.score) >= rangeValue[0] / 100 && Number(item.score) <= rangeValue[1] / 100
+                    ).length
+                  }
+                </b>
+              </Table.Summary.Cell>
+            </Table.Summary.Row>
+          </Table.Summary>
+        )}
+      />
     </>
   );
 }

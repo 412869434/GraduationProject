@@ -1,11 +1,12 @@
 import ReactECharts from "echarts-for-react";
 import { Row, Col } from "antd";
 import { useState, useEffect } from "react";
-import { id2name } from "../public/info";
+import { id2name, info } from "../public/info";
 
 function MyPieCharts(props) {
   const { data, rangeValue } = props;
   const [chartsData, setChartsData] = useState([{ value: 1, name: "default" }]);
+  const [classData, setClassData] = useState([{ value: 1, name: "default" }]);
   const options = {
     title: {
       text: "藻类面积占比图",
@@ -20,9 +21,29 @@ function MyPieCharts(props) {
     },
     series: [
       {
-        name: "Access From",
         type: "pie",
         radius: "50%",
+        data: classData,
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+          normal: {
+            label: {
+              show: true,
+              formatter: "{b} : {c} ({d}%)",
+            },
+            labelLine: { show: true },
+          },
+        },
+        center: ["25%", "50%"],
+      },
+      {
+        type: "pie",
+        radius: "50%",
+        center: ["75%", "50%"],
         data: chartsData,
         itemStyle: {
           emphasis: {
@@ -33,8 +54,7 @@ function MyPieCharts(props) {
           normal: {
             label: {
               show: true,
-              formatter: "{b} : {c} ({d}%)", //带当前图例名 + 百分比
-              //   formatter: "{d}%", //只要百分比
+              formatter: "{b} : {c} ({d}%)",
             },
             labelLine: { show: true },
           },
@@ -47,6 +67,7 @@ function MyPieCharts(props) {
     if (data.length) {
       //   console.log(data);
       const obj = {};
+      const cobj = {};
       for (const item of data) {
         const { score, label, width, height } = item;
         if (score >= rangeValue[0] / 100 && score <= rangeValue[1] / 100) {
@@ -54,6 +75,9 @@ function MyPieCharts(props) {
           const w = parseFloat(width) / 100,
             h = parseFloat(height) / 100;
           obj[label] += w * h;
+          const phylum = info.find((i) => i.ID === label).Phylum;
+          if (!cobj[phylum]) cobj[phylum] = 0;
+          cobj[phylum] += w * h;
         }
       }
       const tmp = Object.keys(obj).map((item) => {
@@ -62,9 +86,17 @@ function MyPieCharts(props) {
           name: id2name[item],
         };
       });
+      const ctmp = Object.keys(cobj).map((item) => {
+        return {
+          value: parseFloat(cobj[item].toFixed(3)),
+          name: item,
+        };
+      });
       setChartsData(tmp);
+      setClassData(ctmp);
     } else {
       setChartsData([{ value: 1, name: "default" }]);
+      setClassData([{ value: 1, name: "default" }]);
     }
   }, [data, rangeValue]);
 
