@@ -140,4 +140,9 @@ const speciesFilter = [...new Set(info.map((i) => i.Species))].map((i) => {
   };
 });
 
-export { info, idFilter, phylumFilter, genusFilter, speciesFilter };
+const id2name = {};
+info.forEach((item) => {
+  id2name[item.ID] = item.Phylum + item.Genus + item.Species;
+});
+
+export { info, idFilter, phylumFilter, genusFilter, speciesFilter, id2name };

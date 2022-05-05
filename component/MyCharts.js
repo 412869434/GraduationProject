@@ -1,6 +1,7 @@
 import ReactECharts from "echarts-for-react";
 import { Row, Col } from "antd";
 import { useState, useEffect } from "react";
+import { id2name } from "../public/info";
 
 function MyCharts(props) {
   const { data } = props;
@@ -37,7 +38,7 @@ function MyCharts(props) {
       const tmp = Object.keys(obj).map((item) => {
         return {
           type: "bar",
-          name: item,
+          name: id2name[item],
           data: obj[item],
         };
       });

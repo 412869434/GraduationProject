@@ -1,6 +1,7 @@
 import ReactECharts from "echarts-for-react";
 import { Row, Col } from "antd";
 import { useState, useEffect } from "react";
+import { id2name } from "../public/info";
 
 function MyClassCharts(props) {
   const { data, rangeValue } = props;
@@ -9,10 +10,11 @@ function MyClassCharts(props) {
 
   const options = {
     xAxis: {
+      type: "category",
       data: xAxis,
     },
     yAxis: {},
-    series: series,
+    series: { type: "bar", data: series },
     tooltip: {
       trigger: "axis",
     },
@@ -35,13 +37,12 @@ function MyClassCharts(props) {
       }
       //   console.log(obj);
       const tmp = Object.keys(obj).map((item) => obj[item]);
-      setXAxis(Object.keys(obj));
-      setSeries({
-        type: "bar",
-        data: tmp,
-      });
+      const name = Object.keys(obj).map((item) => id2name[item]);
+      setXAxis(name);
+      setSeries(tmp);
     } else {
-      setSeries({ type: "bar", name: "", data: [] });
+      setXAxis([]);
+      setSeries([]);
     }
   }, [data, rangeValue]);
 

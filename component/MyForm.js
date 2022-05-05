@@ -32,14 +32,14 @@ function MyForm(props) {
         <Form.Item label={<b>柱状图类型：</b>}>
           <Radio.Group defaultValue="score" onChange={changeHandler} size="small">
             <Radio.Button value="score">全概率</Radio.Button>
-            <Radio.Button value="class">多类别</Radio.Button>
+            <Radio.Button value="class">全类别</Radio.Button>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item
           label={
             <b>
-              多类别概率范围：{rangeValue[0]}-{rangeValue[1]}
+              全类别概率范围：{rangeValue[0]}-{rangeValue[1]}
             </b>
           }
         >

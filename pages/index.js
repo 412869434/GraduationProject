@@ -8,6 +8,7 @@ import MyCharts from "../component/MyCharts";
 import MyTable from "../component/MyTable";
 import MyForm from "../component/MyForm";
 import MyClassCharts from "../component/MyClassCharts";
+import MyPieCharts from "../component/MyPieCharts";
 import { Layout } from "antd";
 
 const { Header, Content } = Layout;
@@ -104,6 +105,7 @@ export default function Home() {
             </Flex>
           </Center>
           {chartsType === "score" ? <MyCharts data={data} /> : <MyClassCharts data={data} rangeValue={rangeValue} />}
+          <MyPieCharts data={data} rangeValue={rangeValue} />
         </Content>
       </Layout>
     </>
