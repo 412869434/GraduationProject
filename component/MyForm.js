@@ -1,7 +1,7 @@
 import { Form, Button, Card, Radio, Slider } from "antd";
 
 function MyForm(props) {
-  const { setData, setImagePreview, setChartsType, chartsType, setRangeValue, rangeValue } = props;
+  const { setData, setImagePreview, setChartsType, setRangeValue, rangeValue } = props;
   const changeHandler = (e) => {
     // console.log(e);
     setChartsType(e.target.value);
@@ -43,13 +43,7 @@ function MyForm(props) {
             </b>
           }
         >
-          <Slider
-            range
-            value={rangeValue}
-            disabled={chartsType === "score"}
-            onChange={(v) => setRangeValue(v)}
-            marks={marks}
-          />
+          <Slider range value={rangeValue} onChange={(v) => setRangeValue(v)} marks={marks} />
         </Form.Item>
       </Form>
     </Card>

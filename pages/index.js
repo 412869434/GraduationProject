@@ -71,7 +71,6 @@ export default function Home() {
                   setData={setData}
                   setImagePreview={setImagePreview}
                   setChartsType={setChartsType}
-                  chartsType={chartsType}
                   rangeValue={rangeValue}
                   setRangeValue={setRangeValue}
                 />
