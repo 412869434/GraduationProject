@@ -38,12 +38,12 @@ function MyPieCharts(props) {
             labelLine: { show: true },
           },
         },
-        center: ["25%", "50%"],
+        center: ["25%", "60%"],
       },
       {
         type: "pie",
         radius: "50%",
-        center: ["75%", "50%"],
+        center: ["75%", "60%"],
         data: chartsData,
         itemStyle: {
           emphasis: {

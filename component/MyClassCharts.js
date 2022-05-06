@@ -21,6 +21,7 @@ function MyClassCharts(props) {
     title: {
       show: true,
       text: "藻类数量柱状图",
+      left: "center",
     },
     notMerge: true,
   };
