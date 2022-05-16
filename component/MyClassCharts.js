@@ -36,7 +36,6 @@ function MyClassCharts(props) {
           obj[label] += 1;
         }
       }
-      //   console.log(obj);
       const tmp = Object.keys(obj).map((item) => obj[item]);
       const name = Object.keys(obj).map((item) => id2name[item]);
       setXAxis(name);

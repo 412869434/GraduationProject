@@ -87,13 +87,7 @@ function MyTable(props) {
                 <b>所有藻类总计</b>
               </Table.Summary.Cell>
               <Table.Summary.Cell index={1}>
-                <b>
-                  {
-                    tableData.filter(
-                      (item) => Number(item.score) >= rangeValue[0] / 100 && Number(item.score) <= rangeValue[1] / 100
-                    ).length
-                  }
-                </b>
+                <b>{tableData.length}</b>
               </Table.Summary.Cell>
             </Table.Summary.Row>
           </Table.Summary>
